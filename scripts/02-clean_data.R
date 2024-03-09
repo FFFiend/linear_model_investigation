@@ -1,3 +1,11 @@
+#### Preamble ####
+# Purpose: cleaning the data and converting birthyr column to age
+# Author: Owais Zahid
+# Date: 9th March 2024
+# Contact: owais.zahid@mail.utoronto.ca
+# License: MIT
+# Pre-requisites: None
+
 # here we are converting the birth year column to age
 library(dplyr)
 library(tidyverse)

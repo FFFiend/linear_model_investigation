@@ -1,10 +1,21 @@
+#### Preamble ####
+# Purpose: Generating the model for the data, and saving into an RDS file.
+# Author: Owais Zahid
+# Date: 9th March 2024
+# Contact: owais.zahid@mail.utoronto.ca
+# License: MIT
+# Pre-requisites: please run files numbered 01,02, and 03 prior to this.
+
+# load in libraries.
 library(tidyverse)
 library(dplyr)
 library(rstanarm)
 library(modelsummary)
+
+# read and convert values in each column to integer.
 ces2020 <-
   read_csv(
-    "~/linear_model_investigation/data/ces2020.csv",
+    "~/linear_model_investigation/data/ces2020.parquet",
     col_types =
       cols(
         "votereg" = col_integer(),
@@ -69,7 +80,9 @@ ces2020 <-
     )
   ) |> select(voted_for, gender, education, race, age)
 
+# preview data after mutation.
 ces2020
+
 # cheeky prime number
 set.seed(71)
 
