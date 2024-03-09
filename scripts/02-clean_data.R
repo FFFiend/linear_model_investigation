@@ -2,7 +2,7 @@
 library(dplyr)
 library(tidyverse)
 
-raw_data = read.csv("~/linear_model_investigation/data/ces2020.csv")
+raw_data = read.csv("~/linear_model_investigation/data/ces2020.parquet")
 raw_data
 
 raw_data$birthyr <- as.numeric(raw_data$birthyr)
@@ -15,5 +15,5 @@ names(raw_data)[names(raw_data) == "birthyr"] <- "age"
 head(raw_data)
 
 # save data back into the csv.
-write.csv(raw_data,"~/linear_model_investigation/data/ces2020.csv")
+write.csv(raw_data,"~/linear_model_investigation/data/ces2020.parquet")
 
