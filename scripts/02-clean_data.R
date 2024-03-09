@@ -14,3 +14,6 @@ raw_data <- raw_data %>% mutate(birthyr = current_year - birthyr)
 names(raw_data)[names(raw_data) == "birthyr"] <- "age"
 head(raw_data)
 
+# save data back into the csv.
+write.csv(raw_data,"~/linear_model_investigation/data/ces2020.csv")
+
