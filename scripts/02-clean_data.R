@@ -10,7 +10,7 @@
 library(dplyr)
 library(tidyverse)
 
-raw_data = read.csv("~/linear_model_investigation/data/ces2020.parquet")
+raw_data = read.csv("~/linear_model_investigation/data/ces2020_raw.parquet")
 raw_data
 
 raw_data$birthyr <- as.numeric(raw_data$birthyr)

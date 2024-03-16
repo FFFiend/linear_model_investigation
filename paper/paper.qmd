@@ -97,7 +97,7 @@ Since we are interested with ages and not respondent birth years, we may process
 #| echo: false
 
 raw_data$birthyr <- as.numeric(raw_data$birthyr)
-current_year <- as.numeric(year(as.Date(Sys.time())))
+current_year <- 2020
 
 # Subtract current year from birth year column to get age
 raw_data <- raw_data %>% mutate(birthyr = current_year - birthyr)
@@ -194,6 +194,7 @@ cat("Table 4. Header for Processed 2020 US Election Survey data.")
 kable(head(ces2020))
 ```
 TODO: complete bar chart section from the worked example.
+
 # Model
 Since we wish to predict how likely it is for a respondent to cast a vote for Biden based on their gender, age, education and race, we shall use the rstanarm (citation needed) library to 
 
