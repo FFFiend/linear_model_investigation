@@ -11,7 +11,6 @@
 # and filtering for the chosen explanatory variables and the response variable.
 library(dataverse)
 library(tidyverse)
-library(arrow)
 
 ces2020 <-
   get_dataframe_by_name(
@@ -22,5 +21,5 @@ ces2020 <-
   ) |>
   select(votereg, CC20_410, gender, educ, race, birthyr)
 
-write_parquet(ces2020, "data/ces2020_raw.parquet")
+write_csv(ces2020, "data/ces2020_raw.parquet")
 

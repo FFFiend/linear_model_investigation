@@ -229,19 +229,19 @@ Our results are summarized in @tbl-modelresults.
 #| include: true
 #| warning: false
 #| message: false
+#| eval: true
 #| echo: false
 cat("results")
 political_preferences <-
   readRDS(file = "~/linear_model_investigation/data/political_preferences.rds")
 
 # model summary
-final_table = modelsummary(
+modelsummary::modelsummary(
   list(
     "Support Biden" = political_preferences
   ),
   statistic = "mad"
 )
-kable(final_table)
 ```
 
 
