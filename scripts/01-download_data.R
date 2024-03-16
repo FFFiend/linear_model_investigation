@@ -20,5 +20,5 @@ ces2020 <-
   ) |>
   select(votereg, CC20_410, gender, educ, race, birthyr)
 
-write_csv(ces2020, "data/ces2020_raw.parquet")
+write_csv(ces2020, "~/linear_model_investigation/data/ces2020_raw.parquet")
 
