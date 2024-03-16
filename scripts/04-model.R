@@ -11,11 +11,12 @@ library(tidyverse)
 library(dplyr)
 library(rstanarm)
 library(modelsummary)
+library(arrow)
 
 # read and convert values in each column to integer.
 ces2020 <-
-  read_csv(
-    "~/linear_model_investigation/data/ces2020.parquet",
+  read_parquet(
+    "data/ces2020.parquet",
     col_types =
       cols(
         "votereg" = col_integer(),
@@ -86,7 +87,7 @@ ces2020
 # cheeky prime number
 set.seed(71)
 
-# using a sample size of n=8000
+# using a sample size of n = 8000
 ces2020_reduced <- 
   ces2020 |> 
   slice_sample(n = 8000)
@@ -107,12 +108,12 @@ political_preferences <-
 # saving RDS
 saveRDS(
   political_preferences,
-  file = "~/linear_model_investigation/data/political_preferences.rds"
+  file = "data/political_preferences.rds"
 )
 
 # reading from the RDS
 political_preferences <-
-  readRDS(file = "~/linear_model_investigation/data/political_preferences.rds")
+  readRDS(file = "data/political_preferences.rds")
 political_preferences 
 
 # model summary

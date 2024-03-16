@@ -6,8 +6,9 @@
 # License: MIT
 # Pre-requisites: please run files numbered 01, 02 prior.
 
+library(arrow)
 
-data = read.csv("~/linear_model_investigation/data/ces2020.parquet")
+data = read_parquet("data/ces2020.parquet")
 data
 
 # Test 1, checking to make sure only 8 race categories exist as indicated
