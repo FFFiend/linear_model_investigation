@@ -9,8 +9,9 @@
 # here we are converting the birth year column to age
 library(dplyr)
 library(tidyverse)
+library(arrow)
 
-raw_data = read.csv("~/linear_model_investigation/data/ces2020_raw.parquet")
+raw_data = read_parquet("data/ces2020_raw.parquet")
 raw_data
 
 raw_data$birthyr <- as.numeric(raw_data$birthyr)
@@ -19,8 +20,9 @@ current_year <- 2020
 raw_data <- raw_data %>% mutate(birthyr = current_year - birthyr)
 # rename to age
 names(raw_data)[names(raw_data) == "birthyr"] <- "age"
-head(raw_data)
+
+
 
 # save data back into the csv.
-write.csv(raw_data,"~/linear_model_investigation/data/ces2020.parquet")
+write_parquet(raw_data,"data/ces2020.parquet")
 
