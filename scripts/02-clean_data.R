@@ -14,8 +14,7 @@ raw_data = read.csv("~/linear_model_investigation/data/ces2020_raw.parquet")
 raw_data
 
 raw_data$birthyr <- as.numeric(raw_data$birthyr)
-current_year <- as.numeric(year(as.Date(Sys.time())))
-
+current_year <- 2020
 # Subtract current year from birth year column to get age
 raw_data <- raw_data %>% mutate(birthyr = current_year - birthyr)
 # rename to age

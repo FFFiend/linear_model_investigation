@@ -32,3 +32,4 @@ sum(is.na(data$educ)) == 0
 
 # Test 7, check for NA values inside the gender column
 sum(is.na(data$gender)) == 0
+
