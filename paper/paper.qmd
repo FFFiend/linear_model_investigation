@@ -3,7 +3,7 @@ title: "Deciphering Key Determinants of Biden Voter Support: Insights from Logis
 author: 
   - Fares Alkorani
   - Owais Zahid
-thanks: "Code and data are available at: https://github.com/FFFiend/linear_model_investigation."
+thanks: "Code and data are available at: https://github.com/FFFiend/us_2020_election_analysis."
 date: today
 date-format: long
 abstract: "On November 4, 2020, the 59th United States presidental election took place where Joe Biden became elected as 46th president of the United States. Using responses from the CES 2020 election survey (n = 8000), we study the effect that gender, race, age, and education have on whether an American voted for Joe Biden using a logistic regression model. We find that men are less likely to vote for Biden than women, respondents with higher education level are more likely to vote for Biden, and that Black respondents are most likely to vote for Biden from all other racial groups. We also find a weak negative correlation between a respondents age and whether they vote for Biden. As the upcoming United States presidental election is anticipated to be between Donald J. Trump and Joe Biden, these results have implications for how both candidates will use voter demographics to guide their campaigns."
@@ -15,9 +15,9 @@ bibliography: references.bib
 
 On November 4, 2020, the 59th United States presidential election took place between Joe Biden and Donald Trump, where Joe Biden was elected as the 46th president of the United States. Historically, there tend to be common demographics among voters who support the Democratic or Republican party and by extension, the presidential candidates from these parties. In addition, voter demographics are strategically considered in presidential campaigns to appeal to certain citizens.
 
-As a result, in this paper the estimand we hope to explore is the likelihood that an American citizen will vote for Joe Biden in the 2020 presidental election given their income, gender, race, and age. We will do this by using the 2020 Cooperative Election Study (CES) [CITATION] which is a national online survey that was administered to a representative sample of American citizens pre and post-election, gathering demographic information from 61,000 respondents. Using 8000 responses from this survey, we construct a logistic regression model using income, gender, race, and age as predictor variables to see which demographics aligned with support for Joe Biden. We find that (**I NEED YOUR MOST RELEVANT FINDINGS HERE**). This information is important as it can allow us to understand the campaign strategies in the 2024 United States presidential election toward citizens with specific demographics, especially as Donald Trump and Joe Biden will likely be representatives of their respective parties for the upcoming presidential election.
+As a result, in this paper the estimand we hope to explore is the likelihood that an American citizen will vote for Joe Biden in the 2020 presidental election given their income, gender, race, and age. We will do this by using the 2020 Cooperative Election Study (CES) [CITATION] which is a national online survey that was administered to a representative sample of American citizens pre and post-election, gathering demographic information from 61,000 respondents. Using 8000 responses from this survey, we construct a logistic regression model using income, gender, race, and age as predictor variables to see which demographics aligned with support for Joe Biden. We find that men are less likely to vote for Biden than women, respondents with higher education level are more likely to vote for Biden, and that Black respondents are most likely to vote for Biden from all other racial groups. We also find a weak negative correlation between a respondents age and whether they vote for Biden. This information is important as it can allow us to understand the campaign strategies in the 2024 United States presidential election toward citizens with specific demographics, especially as Donald Trump and Joe Biden will likely be representatives of their respective parties for the upcoming presidential election.
 
-The remainder of this paper is structured as follows: Section 2 discusses the data from the 2020 CES, Section 3 discusses the logistic regression model that was constructed from the 2020 CES data, Section 4 presents the results, and finally Section 5 discusses our findings and some weaknesses. (**MOSTLY FROM https://tellingstorieswithdata.com/04-writing_research.html#introduction-1, DUNNO IF IT NEEDS REPHRASING OR GIVEN ADDITIONAL DETAILS LATER**).
+The remainder of this paper is structured as follows: @sec-data discusses the data from the 2020 CES, @sec-model discusses the logistic regression model that was constructed from the 2020 CES data, and @sec-results presents the results.
 
 # Data {#sec-data}
 
@@ -164,7 +164,7 @@ ces2020 |>
   theme(legend.position = "bottom")
 ```
 
-# Model
+# Model {#sec-model}
 We resort to using a Logistic Regression model since we are interested in predicting the candidate a survey respondent voted for, given the former's age, gender, education and race. A logistic regression model is suitable as our response variables (1 for Biden and 0 for Trump) are clearly binary. 
 
 ## Model set-up
@@ -204,7 +204,7 @@ We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use
 
 Overall, logistic regression is a robust and interpretable method for modeling binary outcomes like voting preferences, making it a suitable choice for us to indicate what presidential candidate a survey respondent voted for.
 
-# Results
+# Results {#sec-results}
 
 Our results are summarized in the table  below:
 &nbsp;
@@ -233,41 +233,5 @@ As a note, the standard error for any value discussed below shall be abbreviated
 **Race**: Amongst the positive coefficients, observe that voters identifying on the survey as Black demonstrate the highest support for Biden amongst all other racial groups of respondents with a coefficient of 2.590 (sd-err 0.155), whereas Hispanic and Asian respondents bear coefficients 0.572 (sd-err 0.905) and 0.635 (sd-err 0.162) respectively. Coming in last place, we have Middle Eastern respondents with the smallest positive coefficient compared to the other racial groups, with a value of 0.356 (sd-err 0.181). Finally, we have respondents identifying with "Two or more races" that are actually LESS likely to support Biden, with a value of -0.294 (sd-err 0.172). Finally, we observe that respondents identifying as "Other" demonstrate a coefficient of 1.301, although with a comparatively higher standard error of 1.277. 
 
 **Age**: We see a coefficient value of -0.018 (sd-err 0.002) showing a weak negative correlation between the age of a respondent and whether they voted for Biden. All in all, it is bold to claim that there exists a definite negative correlation between a voter's age and whether they voted for Biden.
-
-# Discussion
-
-## First discussion point {#sec-first-point}
-
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
-
-## Second discussion point
-
-## Third discussion point
-
-## Weaknesses and next steps
-
-Weaknesses and next steps should also be included.
-
-\newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional data details
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-
-## Diagnostics
-
-
-\newpage
-
 
 # References
