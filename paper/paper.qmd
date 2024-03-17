@@ -6,7 +6,7 @@ author:
 thanks: "Code and data are available at: https://github.com/FFFiend/linear_model_investigation."
 date: today
 date-format: long
-abstract: "In this paper, we discuss the correlation between various statistics of the respondents to the CES2020 election survey, and whether they voted for Trump or Biden. The statistics are: age, education, gender and race."
+abstract: "On November 4, 2020, the 59th United States presidental election took place where Joe Biden became elected as 46th president of the United States. Using responses from the CES 2020 election survey (n = 8000), we study the effect that gender, race, age, and education have on whether an American voted for Joe Biden using a logistic regression model. We find that men are less likely to vote for Biden than women, respondents with higher education level are more likely to vote for Biden, and that Black respondents are most likely to vote for Biden from all other racial groups. We also find a weak negative correlation between a respondents age and whether they vote for Biden. As the upcoming United States presidental election is anticipated to be between Donald J. Trump and Joe Biden, these results have implications for how both candidates will use voter demographics to guide their campaigns."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -144,6 +144,25 @@ ces2020 <-
 kable(head(ces2020))
 ```
 [CROSS REFERENCE: FIGURE 1] shows that
+```{r}
+#| warning: false
+#| echo: false
+#| label: dist
+#| tbl-cap: The distribution of presidential preferences, by race and education.
+ces2020 |>
+  ggplot(aes(x = education, fill = voted_for)) +
+  stat_count(position = "dodge") +
+  facet_wrap(facets = vars(race)) +
+  theme_minimal() +
+  labs(
+    x = "Highest education",
+    y = "Number of respondents",
+    fill = "Voted for"
+  ) +
+  coord_flip() +
+  scale_fill_brewer(palette = "Set1") +
+  theme(legend.position = "bottom")
+```
 
 # Model
 We resort to using a Logistic Regression model since we are interested in predicting the candidate a survey respondent voted for, given the former's age, gender, education and race. A logistic regression model is suitable as our response variables (1 for Biden and 0 for Trump) are clearly binary. 
