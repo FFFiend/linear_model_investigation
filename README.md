@@ -1,4 +1,8 @@
-# linear_model_investigation
+# Deciphering Key Determinants of Biden Voter Support: Insights from Logistic Regression Analysis in the 2020 US Presidential Election∗
+
+
+# Overview
+This repository contains all materials regarding the "Deciphering Key Determinants of Biden Voter Support: Insights from Logistic Regression Analysis in the 2020 US Presidential Election" paper. This study analyzes the effect that gender, race, education, and age have on who voted for Joe Biden in the 59th United States presidential election using a logistic regression model with data from the 2020 Cooperative Election Study.
 
 # File Structure
 
