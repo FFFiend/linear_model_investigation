@@ -36,7 +36,6 @@ Lastly, "individual records were matched to the Catalist database of registered 
 ## Data Features
 
 ```{r}
-#| warning: false
 #| echo: false
 #| label: raw_data
 #| tbl-cap: A sample of CES 2020 survey data.
@@ -205,14 +204,15 @@ modelsummary::modelsummary(
   statistic = "mad"
 )
 ```
+As a note, the standard error for any value discussed below shall be abbreviated as sd-err.
 
-**Gender**: Test
+**Gender**: The coefficient for Males is -0.45 (0.051 sd-err) which means Males are less likely to cast a vote for Biden compared to Females, or that Males would choose Trump in an election, given that Trump and Biden were the only candidates to choose from.
 
-**Education**: Test
+**Education**: We see that with an increase in literacy level, the likelihood that a candidate will vote for Biden increases. Observe that as we move upwards in the following list of categories: High school graduate, some college, 2-year, 4-year and post-grad, we see that the corresponding coefficients are -0.267 (sd-err 0.198), 0.054 (sd-err 0.195), 0.095 (sd-err 0.203), 0.445 (sd-err 0.196) and 0.906 (sd-err 0.199) respectively, meaning that the more educated a candidate is, the more likely they are to vote for Biden. 
 
-**Race**: Test
+**Race**: Amongst the positive coefficients, observe that voters identifying on the survey as Black demonstrate the highest support for Biden amongst all other racial groups of respondents with a coefficient of 2.590 (sd-err 0.155), whereas Hispanic and Asian respondents bear coefficients 0.572 (sd-err 0.905) and 0.635 (sd-err 0.162) respectively. Coming in last place, we have Middle Eastern respondents with the smallest positive coefficient compared to the other racial groups, with a value of 0.356 (sd-err 0.181). Finally, we have respondents identifying with "Two or more races" that are actually LESS likely to support Biden, with a value of -0.294 (sd-err 0.172). Finally, we observe that respondents identifying as "Other" demonstrate a coefficient of 1.301, although with a comparatively higher standard error of 1.277. 
 
-**Age**:  Test
+**Age**: We see a coefficient value of -0.018 (sd-err 0.002) showing a weak negative correlation between the age of a respondent and whether they voted for Biden. All in all, it is bold to claim that there exists a definite negative correlation between a voter's age and whether they voted for Biden.
 
 # Discussion
 
