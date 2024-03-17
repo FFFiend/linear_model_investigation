@@ -36,15 +36,16 @@ Lastly, "individual records were matched to the Catalist database of registered 
 ## Data Features
 
 ```{r}
-#| include: true
 #| warning: false
-#| message: false
 #| echo: false
+#| label: raw_data
+#| tbl-cap: A sample of CES 2020 survey data.
 
 library(dplyr)
 library(tidyverse)
+library(knitr)
 
-raw_data = read.csv("data/ces2020_raw.parquet")
+raw_data = read.csv("~/linear_model_investigation/data/ces2020_raw.parquet")
 kable(head(raw_data))
 ```
 
@@ -62,10 +63,10 @@ Since we are interested in registered voters who voted for either Biden or Trump
 Lastly, we then process these responses and decode them to match with the questionnaire responses and obtain [CROSS REFERENCE: TABLE 2].
 
 ```{r}
-#| include: true
 #| warning: false
-#| message: false
 #| echo: false
+#| label: final_data
+#| tbl-cap: Header for Processed 2020 CES survey data
 # load in libraries.
 library(tidyverse)
 library(dplyr)
@@ -75,7 +76,7 @@ library(modelsummary)
 # read and convert values in each column to integer.
 ces2020 <-
   read_csv(
-    "linear_model_investigation/data/ces2020.parquet",
+    "~/linear_model_investigation/data/ces2020.parquet",
     col_types =
       cols(
         "votereg" = col_integer(),
@@ -139,8 +140,114 @@ ces2020 <-
       )
     )
   ) |> select(voted_for, gender, education, race, age)
-cat("Table 4. Header for Processed 2020 US Election Survey data.")
 # preview data after mutation.
 kable(head(ces2020))
 ```
 [CROSS REFERENCE: FIGURE 1] shows that
+
+# Model
+We resort to using a Logistic Regression model since we are interested in predicting the candidate a survey respondent voted for, given the former's age, gender, education and race. A logistic regression model is suitable as our response variables (1 for Biden and 0 for Trump) are clearly binary. 
+
+## Model set-up
+\begin{align} 
+y_i|\pi_i, &\sim \mbox{Bern}(\pi_i) \\
+logit(\pi_i) = \beta_0 + \beta_1 \times gender_i + \beta_2 \times age_i + \beta_3 \times education_i + \beta_4 \times race_i \\ 
+\beta_0 &\sim \mbox{Normal}(0, 2.5) \\
+\beta_1 &\sim \mbox{Normal}(0, 2.5) \\
+\beta_2 &\sim \mbox{Normal}(0, 2.5) \\
+\beta_3 &\sim \mbox{Normal}(0, 2.5) \\
+\beta_4 &\sim \mbox{Normal}(0, 2.5)
+\end{align}
+
+We define the response variable $y_i$ to be the candidate that the $ith$ respondent voted for. Note that the value of $y_i$ is either 0 or 1 indicating whether the candidate in question voted for Trump or Biden respectively, and that $y_i$ is conditioned on $\pi_i$ and follows a Bernoulli distribution with parameter $\pi_i$
+
+The explanatory variables $gender_i$, $age_i$, $race_i$ and $education_i$ are the selected attributes (with the same names, of) of the $ith$ respondent. 
+
+We have defined normally distributed priors for the y-intercept $\beta_0$ as well as each of the coefficients of the explanatory variables $\beta_1$, $\beta_2$, $\beta_3$ & $\beta_4$ each with a mean of 0 and standard deviation of 2.5. 
+
+Note that the crux of our model, i.e $logit(\pi_i)$ is expressed as a linear combination of our explanatory variables along with the y-intercept $\beta_0$
+
+Thus, the model enables us to estimate whether a candidate voted for Trump or Biden based on their education, gender, race and age. The logistic nature of the model ensures that any outputs or response variables obtained are either 0 or 1. 
+
+We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
+
+
+### Model justification
+**Binary Outcome**: logistic regression is specifically designed for binary outcomes, which is suitable for predicting whether a survey respondent voted for Biden (1) or Trump (0). Logistic regression models the probability of the response variable falling into a particular category given the predictor variables.
+
+**Interpretability**: Logistic regression provides easily interpretable results. The coefficients associated with each predictor variable represent the change in the log-odds of the outcome for a one-unit change in the predictor variable. This allows for clear interpretation of the effects of each predictor on the likelihood of voting for a particular candidate.
+
+**Efficiency**: Logistic regression tends to perform well even with relatively small sample sizes compared to more complex models. Given that we have a limited set of predictor variables (age, gender, education, and race), logistic regression can efficiently model the relationship between these variables and the voting outcome.
+
+**Regularization Techniques**: If necessary, logistic regression can be extended with regularization techniques such as L1 (Lasso) or L2 (Ridge) regularization to prevent overfitting and improve generalization performance, especially if there are many predictor variables or multicollinearity issues, which can be a useful strategy if overfitting has been observed upon analyzing the results of the model.
+
+**Statistical Inference**: Logistic regression provides inferential statistics such as p-values and confidence intervals for the estimated coefficients, allowing you to assess the significance of each predictor variable in predicting the outcome.
+
+Overall, logistic regression is a robust and interpretable method for modeling binary outcomes like voting preferences, making it a suitable choice for us to indicate what presidential candidate a survey respondent voted for.
+
+# Results
+
+Our results are summarized in the table  below:
+&nbsp;
+```{r}
+#| warning: false
+#| echo: false
+#| label: model_summary
+#| tbl-cap: Whether a respondent is likely to vote for Biden based on their gender, education, race and age (n=8000).
+political_preferences <-
+  readRDS(file = "~/linear_model_investigation/data/political_preferences.rds")
+
+# model summary
+modelsummary::modelsummary(
+  list(
+    "Support Biden" = political_preferences
+  ),
+  statistic = "mad"
+)
+```
+
+**Gender**: Test
+
+**Education**: Test
+
+**Race**: Test
+
+**Age**:  Test
+
+# Discussion
+
+## First discussion point {#sec-first-point}
+
+If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+
+## Second discussion point
+
+## Third discussion point
+
+## Weaknesses and next steps
+
+Weaknesses and next steps should also be included.
+
+\newpage
+
+\appendix
+
+# Appendix {-}
+
+
+# Additional data details
+
+# Model details {#sec-model-details}
+
+## Posterior predictive check
+
+In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
+
+
+## Diagnostics
+
+
+\newpage
+
+
+# References
