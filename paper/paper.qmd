@@ -25,6 +25,8 @@ The remainder of this paper is structured as follows: @sec-data discusses the da
 
 In this paper, we will be using the 2020 Cooperative Election Study (CES) [CITATION], administered by YouGov, is a yearly online survey that gathers information regarding American adults and their political attitudes. This study was chosen because its dataset is publicly accessible, includes vote validation, and contains a diverse selection of attributes which make it possible to study how demographics of American adults correlates with preference for presidential candidate. 
 
+We shall be using the the following libraries: dplyr [@citedplyr], tidyverse [@citetidyverse], knitr [@citeknitr], stanarm [@citestanarm] and modelsummary [@citemodelsummary].
+
 ## Data Measurement
 
 Most, if not all variables in the 2020 CES dataset correspond to a question asked in the CCES online questionnaire. Most respondents to this questionnaire are YouGov panelists, but other respondents were recruited from online surveys or other survey providers. [CITATION]
@@ -49,7 +51,7 @@ raw_data = read.csv("~/linear_model_investigation/data/ces2020_raw.parquet")
 kable(head(raw_data))
 ```
 
-We use the R programming language [@citeR] and dataverse [CITATION] to access the CES dataset which initially begins with 61,000 respondents. From this dataset, we begin with the following variables as shown in the [FIRST TABLE CROSS REFERENCE]. The values from these variables from the questionnaire corresponding to each variable can be found in the Appendix along with the value it was numerically coded to in the original dataset [CROSS REFERENCE: TABLE 1].
+We use the R programming language [@citeR] and dataverse [@citedataverse] to access the CES dataset which initially begins with 61,000 respondents. From this dataset, we begin with the following variables as shown in the [FIRST TABLE CROSS REFERENCE]. The values from these variables from the questionnaire corresponding to each variable can be found in the Appendix along with the value it was numerically coded to in the original dataset [CROSS REFERENCE: TABLE 1].
 
 * votereg: This is a binary variable where the values 1 and 2 signify whether a person is registered to vote or not, respectively.
 * cc20_410: This variable measures who the respondent voted for as President of the United States if they voted (with the values 1 and 2 corresponding to a vote for Biden and Trump, respectively) and values 4 through 7 that distinguish non-voters
