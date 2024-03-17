@@ -15,59 +15,6 @@ bibliography: references.bib
 
 We are concerned with assessing whether we can predict what candidate a new survey respondent is going to vote for, given their age, education, gender and race. Accordingly, we shall be simulating a similar scenario for the 2020 US presidential election below. 
 
-
-# Simulation
-We first start with simulating the dataset, and recall that we are concerned with each voter's education level, gender, race and age. Our chosen sample size is 8000, and the categories for education and race have been named akin to the categories in the dataset. Thus, the header of the table obtained for the simulation is shown below:
-```{r}
-#| include: true
-#| warning: false
-#| message: false
-#| echo: false
-# setting seed, prime number :P
-set.seed(71)
-library(knitr)
-library(tibble)
-library(dplyr)
-# sample size 8000
-num_obs <- 8000
-
-# simulating the actual data
-# using 8 categories for races as in the dataset, and ages 0-100.
-us_political_preferences <- tibble(
-  education = sample(0:4, size = num_obs, replace = TRUE),
-  gender = sample(0:1, size = num_obs, replace = TRUE),
-  race = sample(1:8, size = num_obs, replace = TRUE),
-  age = sample(0:100, size = num_obs, replace=TRUE),
-  support_prob = ((education + gender + race + age) / 7),
-) |>
-  mutate(
-    supports_biden = if_else(runif(n = num_obs) < support_prob, "yes", "no"),
-    education = case_when(
-      education == 0 ~ "< High school",
-      education == 1 ~ "High school",
-      education == 2 ~ "Some college",
-      education == 3 ~ "College",
-      education == 4 ~ "Post-grad"
-    ),
-    gender = if_else(gender == 0, "Male", "Female"),
-    race = case_when(
-      race == 1 ~ "White",
-      race == 2 ~ "Black",
-      race == 3 ~ "Hispanic",
-      race == 4 ~ "Asian",
-      race == 5 ~ "Native American",
-      race == 6 ~ "Middle Eastern",
-      race == 7 ~ "Two or more races",
-      race == 8 ~ "Other"
-    )
-  ) |>
-  select(-support_prob, supports_biden, gender, education, race, age)
-
-# preview the simulated data
-cat("Table 1. Header for the political preferences dataset.")
-kable(head(us_political_preferences))
-```
-
 # Data {#sec-data}
 
 We will be using the 2020 Cooperative Election Study (CES) (CITATION TODO) as our dataset, which can be previewed below:
@@ -79,9 +26,11 @@ We will be using the 2020 Cooperative Election Study (CES) (CITATION TODO) as ou
 #| echo: false
 
 library(dplyr)
+library(knitr)
 library(tidyverse)
 
 raw_data = read.csv("~/linear_model_investigation/data/ces2020_raw.parquet")
+cat("Table 1. Header for raw election survey data")
 kable(head(raw_data))
 ```
 To elaborate further on the dataset starting with the ```votereg``` column, values 1 and 2 signifies whether a person has voted or not, respectively. Naturally, for entries with a value of 2 under this column, the corresponding ```CC20_410``` value is NA, and in the other case the values 1 and 2 signify a vote for Biden or Trump respectively. The naming of this column corresponds to the question in the survey from which the data for it was collected, which asks "For whom did you vote for President of the United States?" (citation needed), with a total of 6 options, where Biden and Trump correspond to the first two.
@@ -103,7 +52,7 @@ current_year <- 2020
 raw_data <- raw_data %>% mutate(birthyr = current_year - birthyr)
 # rename to age
 names(raw_data)[names(raw_data) == "birthyr"] <- "age"
-cat("Table 3. Header for 2020 US Election Survey data with the birthyr column converted to ages")
+cat("Table 2. Header for 2020 US Election Survey data with the birthyr column converted to ages")
 kable(head(raw_data))
 
 # save data back into the csv.
@@ -189,22 +138,16 @@ ces2020 <-
       )
     )
   ) |> select(voted_for, gender, education, race, age)
-cat("Table 4. Header for Processed 2020 US Election Survey data.")
+cat("Table 3. Header for Processed 2020 US Election Survey data.")
 # preview data after mutation.
 kable(head(ces2020))
 ```
 TODO: complete bar chart section from the worked example.
 
 # Model
-Since we wish to predict how likely it is for a respondent to cast a vote for Biden based on their gender, age, education and race, we shall use the rstanarm (citation needed) library to 
-
-The goal of our modelling strategy is twofold. Firstly,...
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+We resort to using a Logistic Regression model since we are interested in predicting the candidate a survey respondent voted for, given the former's age, gender, education and race. A logistic regression model is suitable as our response variables (1 for Biden and 0 for Trump) are clearly binary. 
 
 ## Model set-up
-We define $y_i$ as the candidate the $ith$ respondent likely voted for, mapping 1 and 0 to Biden and Trump respectively. The variables $gender_i$, $age_i$, $race_i$ and $education_i$ are the selected attributes (with the same names, of) of the $ith$ respondent. 
-
 \begin{align} 
 y_i|\pi_i, &\sim \mbox{Bern}(\pi_i) \\
 logit(\pi_i) = \beta_0 + \beta_1 \times gender_i + \beta_2 \times age_i + \beta_3 \times education_i + \beta_4 \times race_i \\ 
@@ -215,27 +158,46 @@ logit(\pi_i) = \beta_0 + \beta_1 \times gender_i + \beta_2 \times age_i + \beta_
 \beta_4 &\sim \mbox{Normal}(0, 2.5)
 \end{align}
 
+We define the response variable $y_i$ to be the candidate that the $ith$ respondent voted for. Note that the value of $y_i$ is either 0 or 1 indicating whether the candidate in question voted for Trump or Biden respectively, and that $y_i$ is conditioned on $\pi_i$ and follows a Bernoulli distribution with parameter $\pi_i$
+
+The explanatory variables $gender_i$, $age_i$, $race_i$ and $education_i$ are the selected attributes (with the same names, of) of the $ith$ respondent. 
+
+We have defined normally distributed priors for the y-intercept $\beta_0$ as well as each of the coefficients of the explanatory variables $\beta_1$, $\beta_2$, $\beta_3$ & $\beta_4$ each with a mean of 0 and standard deviation of 2.5. 
+
+Note that the crux of our model, i.e $logit(\pi_i)$ is expressed as a linear combination of our explanatory variables along with the y-intercept $\beta_0$
+
+Thus, the model enables us to estimate whether a candidate voted for Trump or Biden based on their education, gender, race and age. The logistic nature of the model ensures that any outputs or response variables obtained are either 0 or 1. 
+
 We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
 
 
 ### Model justification
-I actually have no idea what to expect lol
+**Binary Outcome**: logistic regression is specifically designed for binary outcomes, which is suitable for predicting whether a survey respondent voted for Biden (1) or Trump (0). Logistic regression models the probability of the response variable falling into a particular category given the predictor variables.
+
+**Interpretability**: Logistic regression provides easily interpretable results. The coefficients associated with each predictor variable represent the change in the log-odds of the outcome for a one-unit change in the predictor variable. This allows for clear interpretation of the effects of each predictor on the likelihood of voting for a particular candidate.
+
+**Efficiency**: Logistic regression tends to perform well even with relatively small sample sizes compared to more complex models. Given that we have a limited set of predictor variables (age, gender, education, and race), logistic regression can efficiently model the relationship between these variables and the voting outcome.
+
+**Regularization Techniques**: If necessary, logistic regression can be extended with regularization techniques such as L1 (Lasso) or L2 (Ridge) regularization to prevent overfitting and improve generalization performance, especially if there are many predictor variables or multicollinearity issues, which can be a useful strategy if overfitting has been observed upon analyzing the results of the model.
+
+**Statistical Inference**: Logistic regression provides inferential statistics such as p-values and confidence intervals for the estimated coefficients, allowing you to assess the significance of each predictor variable in predicting the outcome.
+
+Overall, logistic regression is a robust and interpretable method for modeling binary outcomes like voting preferences, making it a suitable choice for us to indicate what presidential candidate a survey respondent voted for.
 
 # Results
 
-Our results are summarized in @tbl-modelresults.
-
+Our results are summarized in the table  below:
+&nbsp;
 ```{r}
 #| include: true
 #| warning: false
 #| message: false
-#| eval: true
 #| echo: false
-cat("results")
 political_preferences <-
   readRDS(file = "~/linear_model_investigation/data/political_preferences.rds")
 
 # model summary
+cat("Table 4. Whether a respondent is likely to vote for Biden based on their gender, education, race and age (n=8000).")
 modelsummary::modelsummary(
   list(
     "Support Biden" = political_preferences
@@ -244,8 +206,13 @@ modelsummary::modelsummary(
 )
 ```
 
+**Gender**: Test
 
+**Education**: Test
 
+**Race**: Test
+
+**Age**:  Test
 
 # Discussion
 
