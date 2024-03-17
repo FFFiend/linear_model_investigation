@@ -36,6 +36,7 @@ Lastly, "individual records were matched to the Catalist database of registered 
 ## Data Features
 
 ```{r}
+#| warning: false 
 #| echo: false
 #| label: raw_data
 #| tbl-cap: A sample of CES 2020 survey data.
